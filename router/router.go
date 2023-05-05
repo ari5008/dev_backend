@@ -2,6 +2,7 @@ package router
 
 import (
 	"backend/controller"
+	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
@@ -18,9 +19,19 @@ func NewRouter(uc controller.IUserController) *echo.Echo {
 		AllowMethods:     []string{"GET", "PUT", "POST", "DELETE"},
 		AllowCredentials: true,
 	}))
+	e.Use(middleware.CSRFWithConfig(middleware.
+		CSRFConfig{
+			CookiePath: "/",
+			CookieDomain: os.Getenv("API_DOMAIN"),
+			CookieHTTPOnly: true,
+			// CookieSameSite: http.SameSiteNoneMode,
+			CookieSameSite: http.SameSiteDefaultMode,
+			// CookieMaxAge: 60,
+		}))
+
 	e.POST("/signup", uc.Signup)
 	e.POST("/login", uc.Login)
 	e.POST("/logout", uc.Logout)
-	
+	e.GET("/csrf", uc.CsrfToken)
 	return e
 }
