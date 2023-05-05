@@ -7,6 +7,7 @@ import (
 	"backend/repository"
 	"backend/router"
 	"backend/usecase"
+	"backend/validator"
 	"fmt"
 )
 
@@ -17,7 +18,8 @@ func main() {
 	dbConn.AutoMigrate(&model.User{})
 
 	useRepository := repository.NewUserRepository(dbConn)
-	userUsecase := usecase.NewUserUsecase(useRepository)
+	userValidator := validator.NewUserValidator()
+	userUsecase := usecase.NewUserUsecase(useRepository, userValidator)
 	userController := controller.NewUserController(userUsecase)
 	e := router.NewRouter(userController)
 	e.Logger.Fatal(e.Start(":8080"))

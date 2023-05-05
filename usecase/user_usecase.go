@@ -3,6 +3,7 @@ package usecase
 import (
 	"backend/model"
 	"backend/repository"
+	"backend/validator"
 	"os"
 	"time"
 
@@ -17,18 +18,22 @@ type IUserUsecase interface {
 
 type userUsecase struct {
 	ur repository.IUserRepository
+	uv validator.IUserValidator
 }
 
-func NewUserUsecase(ur repository.IUserRepository) IUserUsecase {
-	return &userUsecase{ur}
+func NewUserUsecase(ur repository.IUserRepository, uv validator.IUserValidator) IUserUsecase {
+	return &userUsecase{ur, uv}
 }
 
 func (uu *userUsecase) Signup(user model.User) (*model.UserResponse, error) {
+	if err := uu.uv.UserValidate(user); err != nil {
+		return nil, err
+	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if err != nil {
 		return nil, err
 	}
-	newUser := model.User{Email: user.Email, Password: hash}
+	newUser := model.User{Email: user.Email, Password: string(hash)}
 	if err := uu.ur.CreateUser(&newUser); err != nil {
 		return nil, err
 	}
@@ -43,6 +48,9 @@ func (uu *userUsecase) Signup(user model.User) (*model.UserResponse, error) {
 }
 
 func (uu *userUsecase) Login(user model.User) (string, error) {
+	if err := uu.uv.UserValidate(user); err != nil {
+		return "", err
+	}
 	storedUser := model.User{}
 	if err := uu.ur.GetUserByEmail(&storedUser, user.Email); err != nil {
 		return "", err
