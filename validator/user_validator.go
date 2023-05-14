@@ -18,17 +18,17 @@ func NewUserValidator() IUserValidator {
 }
 
 func (uv *UserValidator) UserValidate(user model.User) error {
-	return validation.ValidateStruct(&user, 
+	return validation.ValidateStruct(&user,
 		validation.Field(
 			&user.Email,
-			validation.Required.Error("email is required"),
-			validation.RuneLength(1, 30).Error("limited max 30 char"),
-			is.Email.Error("is not valid email format"),
+			validation.Required.Error("require email"),
+			validation.RuneLength(1, 30).Error("limit email"),
+			is.Email.Error("correct email"),
 		),
 		validation.Field(
 			&user.Password,
-			validation.Required.Error("password is required"),
-			validation.RuneLength(6, 30).Error("limited min 6 max 30 char"),
+			validation.Required.Error("require password"),
+			validation.RuneLength(6, 30).Error("limit password"),
 		),
 	)
 }
