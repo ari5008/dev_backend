@@ -15,12 +15,19 @@ func main() {
 	dbConn := db.NewDB()
 	defer fmt.Println("successful")
 	defer db.CloseDB(dbConn)
-	dbConn.AutoMigrate(&model.User{})
+	dbConn.AutoMigrate(&model.User{}, &model.Account{})
 
 	useRepository := repository.NewUserRepository(dbConn)
+	accountRepository := repository.NewAccountRepository(dbConn)
+
 	userValidator := validator.NewUserValidator()
+
 	userUsecase := usecase.NewUserUsecase(useRepository, userValidator)
-	userController := controller.NewUserController(userUsecase)
-	e := router.NewRouter(userController)
+	accountUsecase := usecase.NewAccountUsecase(accountRepository)
+
+	userController := controller.NewUserController(userUsecase, accountUsecase)
+	accountController := controller.NewAccountController(accountUsecase)
+
+	e := router.NewRouter(userController, accountController)
 	e.Logger.Fatal(e.Start(":8080"))
 }
