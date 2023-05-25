@@ -19,8 +19,8 @@ func NewAccountValidator() IAccountValidator {
 func (av *accountValidator) AccountValidate(account model.Account) error {
 	return validation.ValidateStruct(&account,
 		validation.Field(
-			&account.Name,
-			validation.RuneLength(0, 20).Error("limited name max 20 char "),
+			&account.UserName,
+			validation.RuneLength(0, 20).Error("limited user_name max 20 char "),
 		),
 		validation.Field(
 			&account.Introduction,

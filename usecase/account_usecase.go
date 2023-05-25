@@ -7,7 +7,7 @@ import (
 )
 
 type IAccountUsecase interface {
-	CreateAccount(account model.Account)  error
+	CreateAccount(account model.Account) error
 	GetAccount(userId uint) (model.AccountResponse, error)
 	UpdateAccount(account model.Account, userId uint, accountId uint) (model.AccountResponse, error)
 	DeleteAccount(userId uint, accountId uint) error
@@ -26,7 +26,7 @@ func (au *accountUsecase) CreateAccount(account model.Account) error {
 	if err := au.ar.CreateAccount(&account); err != nil {
 		return err
 	}
-	return  nil
+	return nil
 }
 
 func (au *accountUsecase) GetAccount(userId uint) (model.AccountResponse, error) {
@@ -36,7 +36,7 @@ func (au *accountUsecase) GetAccount(userId uint) (model.AccountResponse, error)
 	}
 	resAccount := model.AccountResponse{
 		ID:           account.ID,
-		Name:         account.Name,
+		UserName:     account.UserName,
 		ImageURL:     account.ImageURL,
 		Introduction: account.Introduction,
 		CreatedAt:    account.CreatedAt,
@@ -54,7 +54,7 @@ func (au *accountUsecase) UpdateAccount(account model.Account, userId uint, acco
 	}
 	resAccount := model.AccountResponse{
 		ID:           account.ID,
-		Name:         account.Name,
+		UserName:     account.UserName,
 		ImageURL:     account.ImageURL,
 		Introduction: account.Introduction,
 		CreatedAt:    account.CreatedAt,
