@@ -19,10 +19,11 @@ type IUserController interface {
 
 type userController struct {
 	uu usecase.IUserUsecase
+	au usecase.IAccountUsecase
 }
 
-func NewUserController(uu usecase.IUserUsecase) IUserController {
-	return &userController{uu}
+func NewUserController(uu usecase.IUserUsecase, au usecase.IAccountUsecase) IUserController {
+	return &userController{uu, au}
 }
 
 func (uc *userController) Signup(c echo.Context) error {
@@ -30,11 +31,21 @@ func (uc *userController) Signup(c echo.Context) error {
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	response, err := uc.uu.Signup(user)
+
+	userResponse, err := uc.uu.Signup(user)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
-	return c.JSON(http.StatusCreated, response)
+
+	account := model.Account{
+		UserId: userResponse.ID,
+	}
+	err = uc.au.CreateAccount(account)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, userResponse)
 }
 
 func (uc *userController) Login(c echo.Context) error {
@@ -49,10 +60,10 @@ func (uc *userController) Login(c echo.Context) error {
 	cookie := new(http.Cookie)
 	cookie.Name = "token"
 	cookie.Value = tokenString
-	cookie.Expires = time.Now().Add(24 * time.Hour)
+	cookie.Expires = time.Now().Add(60 * time.Minute)
 	cookie.Path = "/"
 	cookie.Domain = os.Getenv("API_DOMAIN")
-	cookie.Secure = true 
+	cookie.Secure = true
 	cookie.HttpOnly = true
 	cookie.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookie)
@@ -66,7 +77,7 @@ func (uc *userController) Logout(c echo.Context) error {
 	cookie.Expires = time.Now()
 	cookie.Path = "/"
 	cookie.Domain = os.Getenv("API_DOMAIN")
-	cookie.Secure = true 
+	cookie.Secure = true
 	cookie.HttpOnly = true
 	cookie.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookie)
