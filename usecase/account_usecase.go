@@ -3,6 +3,7 @@ package usecase
 import (
 	"backend/model"
 	"backend/repository"
+	"backend/validator"
 )
 
 type IAccountUsecase interface {
@@ -14,10 +15,11 @@ type IAccountUsecase interface {
 
 type accountUsecase struct {
 	ar repository.IAccountRepository
+	av validator.IAccountValidator
 }
 
-func NewAccountUsecase(ar repository.IAccountRepository) IAccountUsecase {
-	return &accountUsecase{ar}
+func NewAccountUsecase(ar repository.IAccountRepository, av validator.IAccountValidator) IAccountUsecase {
+	return &accountUsecase{ar, av}
 }
 
 func (au *accountUsecase) CreateAccount(account model.Account) error {
@@ -44,6 +46,9 @@ func (au *accountUsecase) GetAccount(userId uint) (model.AccountResponse, error)
 }
 
 func (au *accountUsecase) UpdateAccount(account model.Account, userId uint, accountId uint) (model.AccountResponse, error) {
+	if err := au.av.AccountValidate(account); err != nil {
+		return model.AccountResponse{}, err
+	}
 	if err := au.ar.UpdateAccount(&account, userId, accountId); err != nil {
 		return model.AccountResponse{}, err
 	}
