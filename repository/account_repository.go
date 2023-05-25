@@ -10,7 +10,7 @@ import (
 
 type IAccountRepository interface {
 	CreateAccount(account *model.Account) error
-	GetAccountById(account *model.Account, userId uint) error
+	GetAccount(account *model.Account, userId uint) error
 	UpdateAccount(account *model.Account, userId uint, accountId uint) error
 	DeleteAccount(userId uint, accountId uint) error
 }
@@ -30,7 +30,7 @@ func (ar *accountRepository) CreateAccount(account *model.Account) error {
 	return nil
 }
 
-func (ar *accountRepository) GetAccountById(account *model.Account, userId uint) error {
+func (ar *accountRepository) GetAccount(account *model.Account, userId uint) error {
 	if err := ar.db.Where("user_id=?", userId).First(account).Error; err != nil {
 		return err
 	}
