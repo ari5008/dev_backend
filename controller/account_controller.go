@@ -11,7 +11,7 @@ import (
 )
 
 type IAccountController interface {
-	GetAccountById(c echo.Context) error
+	GetAccount(c echo.Context) error
 	UpdateAccount(c echo.Context) error
 	DeleteAccount(c echo.Context) error
 }
@@ -24,15 +24,15 @@ func NewAccountController(au usecase.IAccountUsecase) IAccountController {
 	return &accountController{au}
 }
 
-func (ac *accountController) GetAccountById(c echo.Context) error {
+func (ac *accountController) GetAccount(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["user_id"]
-	accountRes, err := ac.au.GetAccountById(uint(userId.(float64)))
+	resAccount, err := ac.au.GetAccount(uint(userId.(float64)))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
-	return c.JSON(http.StatusOK, accountRes)
+	return c.JSON(http.StatusOK, resAccount)
 }
 
 func (ac *accountController) UpdateAccount(c echo.Context) error {

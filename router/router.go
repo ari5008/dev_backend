@@ -22,13 +22,13 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController) 
 	}))
 	e.Use(middleware.CSRFWithConfig(middleware.
 		CSRFConfig{
-			CookiePath: "/",
-			CookieDomain: os.Getenv("API_DOMAIN"),
-			CookieHTTPOnly: true,
-			// CookieSameSite: http.SameSiteNoneMode,
-			CookieSameSite: http.SameSiteDefaultMode,
-			// CookieMaxAge: 60,
-		}))
+		CookiePath:     "/",
+		CookieDomain:   os.Getenv("API_DOMAIN"),
+		CookieHTTPOnly: true,
+		// CookieSameSite: http.SameSiteNoneMode,
+		CookieSameSite: http.SameSiteDefaultMode,
+		// CookieMaxAge: 60,
+	}))
 
 	e.POST("/signup", uc.Signup)
 	e.POST("/login", uc.Login)
@@ -37,12 +37,13 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController) 
 
 	a := e.Group("/account")
 	a.Use(echojwt.WithConfig(echojwt.Config{
-		SigningKey: []byte(os.Getenv("SECRET")),
+		SigningKey:  []byte(os.Getenv("SECRET")),
 		TokenLookup: "cookie:token",
 	}))
-	a.GET("/:accountId", ac.GetAccountById)
+
+	a.GET("", ac.GetAccount)
 	a.PUT("/:accountId", ac.UpdateAccount)
-	a.DELETE("/accountId", ac.DeleteAccount)
+	a.DELETE("/:accountId", ac.DeleteAccount)
 
 	return e
 }
