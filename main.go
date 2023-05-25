@@ -21,9 +21,10 @@ func main() {
 	accountRepository := repository.NewAccountRepository(dbConn)
 
 	userValidator := validator.NewUserValidator()
+	accountValidator := validator.NewAccountValidator()
 
 	userUsecase := usecase.NewUserUsecase(useRepository, userValidator)
-	accountUsecase := usecase.NewAccountUsecase(accountRepository)
+	accountUsecase := usecase.NewAccountUsecase(accountRepository, accountValidator)
 
 	userController := controller.NewUserController(userUsecase, accountUsecase)
 	accountController := controller.NewAccountController(accountUsecase)
