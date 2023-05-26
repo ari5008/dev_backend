@@ -40,7 +40,7 @@ func (ar *accountRepository) GetAccount(account *model.Account, userId uint) err
 func (ar *accountRepository) UpdateAccount(account *model.Account, userId uint, accountId uint) error {
 	result := ar.db.Model(account).Clauses(clause.Returning{}).Where("id=? AND user_id=?", accountId, userId).
 		Updates(map[string]interface{}{
-			"name":         account.Name,
+			"user_name":         account.UserName,
 			"image_url":    account.ImageURL,
 			"introduction": account.Introduction,
 		})
