@@ -38,11 +38,8 @@ func (uu *userUsecase) Signup(user model.User) (*model.UserResponse, error) {
 		return nil, err
 	}
 	response := &model.UserResponse{
-		ID:        newUser.ID,
-		Email:     newUser.Email,
-		Name:      newUser.Name,
-		CreatedAt: newUser.CreatedAt,
-		UpdatedAt: newUser.UpdatedAt,
+		ID:    newUser.ID,
+		Email: newUser.Email,
 	}
 	return response, nil
 }
@@ -61,7 +58,7 @@ func (uu *userUsecase) Login(user model.User) (string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": storedUser.ID,
-		"exp":     time.Now().Add(time.Hour * 12).Unix(),
+		"exp":     time.Now().Add(time.Minute * 60).Unix(),
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
 	if err != nil {
