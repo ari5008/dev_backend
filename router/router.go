@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func NewRouter(uc controller.IUserController, ac controller.IAccountController, tc controller.ITrackController) *echo.Echo {
+func NewRouter(uc controller.IUserController, ac controller.IAccountController, tc controller.ITrackController, lc controller.ILikeFlagController) *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"http:localhost:3000",
@@ -34,8 +34,7 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	e.POST("/login", uc.Login)
 	e.POST("/logout", uc.Logout)
 	e.GET("/csrf", uc.CsrfToken)
-
-	e.GET("/track", tc.GetAllTracks)
+	
 	
 	a := e.Group("/account")
 	a.Use(echojwt.WithConfig(echojwt.Config{
@@ -43,11 +42,18 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 		TokenLookup: "cookie:token",
 	}))
 	
-	a.GET("", ac.GetAccount)
+	a.GET("", ac.GetAccount)	
 	a.PUT("/:accountId", ac.UpdateAccount)
 	a.DELETE("/:accountId", ac.DeleteAccount)
 	
+	a.GET("/tracks", tc.GetAllTracks)
 	a.POST("/createTrack", tc.CreateTrack)
+	a.PUT("/track/:trackId", tc.UpdateTrack)
+
+	a.POST("/createLikeFlag", lc.CreateLikeFlag)
+	a.PUT("/addLikeFlag", lc.AddLikeFlag)
+	a.PUT("/addUnLikeFlag", lc.AddUnLikeFlag)
+	a.GET("/getLikeFlag/:trackId", lc.GetIsLikedFlag)
 
 	return e
 }
