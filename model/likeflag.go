@@ -14,8 +14,8 @@ type Likeflag struct {
 }
 
 type LikeflagResponse struct {
-	ID        uint      `json:"id" gorm:"primaryKey"`
-	AccountID uint      `json:"account_id" gorm:"index"`
-	TrackID   uint      `json:"track_id" gorm:"index"`
-	Liked     bool      `json:"liked" gorm:"default:false"`
+	ID        uint `json:"id" gorm:"primaryKey"`
+	AccountID uint `json:"account_id" gorm:"index"`
+	TrackID   uint `json:"track_id" gorm:"index"`
+	Liked     bool `json:"liked" gorm:"default:false"`
 }
