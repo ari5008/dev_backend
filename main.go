@@ -17,9 +17,14 @@ func main() {
 	defer db.CloseDB(dbConn)
 	dbConn.AutoMigrate(&model.User{}, &model.Account{}, &model.Track{}, &model.Likeflag{})
 	const idxName = "idx_account_id_track_id"
+	dropIdxSQL := fmt.Sprintf("DROP INDEX IF EXISTS %s", idxName)
+	// Execute the SQL statement to drop the index
+	if err := dbConn.Exec(dropIdxSQL).Error; err != nil {
+		panic(err)
+	}
 	// Create SQL statement for adding the unique index
 	createIdxSQL := fmt.Sprintf("CREATE UNIQUE INDEX %s ON likeflags (account_id, track_id)", idxName)
-	// Execute the SQL statement
+	// Execute the SQL statement to create the index
 	if err := dbConn.Exec(createIdxSQL).Error; err != nil {
 		panic(err)
 	}
