@@ -16,6 +16,13 @@ func main() {
 	defer fmt.Println("successful")
 	defer db.CloseDB(dbConn)
 	dbConn.AutoMigrate(&model.User{}, &model.Account{}, &model.Track{}, &model.Likeflag{})
+	const idxName = "idx_account_id_track_id"
+	// Create SQL statement for adding the unique index
+	createIdxSQL := fmt.Sprintf("CREATE UNIQUE INDEX %s ON likeflags (account_id, track_id)", idxName)
+	// Execute the SQL statement
+	if err := dbConn.Exec(createIdxSQL).Error; err != nil {
+		panic(err)
+	}
 
 	useRepository := repository.NewUserRepository(dbConn)
 	accountRepository := repository.NewAccountRepository(dbConn)
