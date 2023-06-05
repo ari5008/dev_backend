@@ -23,18 +23,20 @@ func NewLikeFlagRepository(db *gorm.DB) ILikeFlagRepository {
 
 func (lr *likeFlagRepository) CreateLikeFlag(likeFlag *model.Likeflag) error {
 
-	var count int64
-	result := lr.db.Model(likeFlag).Where("account_id = ? AND track_id = ?", likeFlag.AccountID, likeFlag.TrackID).Count(&count)
-	if result.Error != nil {
-		return nil
-	}
-
-	if count == 0 {
-		if err := lr.db.Create(&likeFlag).Error; err != nil {
-			return err
+	return lr.db.Transaction(func(tx *gorm.DB) error {
+		var count int64
+		result := tx.Model(likeFlag).Where("account_id = ? AND track_id = ?", likeFlag.AccountID, likeFlag.TrackID).Count(&count)
+		if result.Error != nil {
+			return nil
 		}
-	}
-	return nil
+	
+		if count == 0 {
+			if err := tx.Create(&likeFlag).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 func (lr *likeFlagRepository) AddLikeFlag(likeFlag *model.Likeflag) error {
