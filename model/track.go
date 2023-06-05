@@ -8,9 +8,8 @@ type Track struct {
 	ArtistName  string    `json:"artist_name"`
 	JacketImage string    `json:"jacket_image"`
 	Genre       string    `json:"genre"`
-	Comment     string		`json:"comment`
-	Likes       uint      `json:"likes"`
-	Account     Account   `json:"account" gorm:"foreignKey:AccountId; constraint:OnDelete:CASCADE"`
+	Comment     string    `json:"comment"`
+	Likes       int       `json:"likes"`
 	AccountId   uint      `json:"account_id" gorm:"not null"`
 	CreatedAt   time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt   time.Time `json:"updated_at" gorm:"autoUpdateTime"`
@@ -22,8 +21,9 @@ type TrackResponse struct {
 	ArtistName  string    `json:"artist_name"`
 	JacketImage string    `json:"jacket_image"`
 	Genre       string    `json:"genre"`
-	Comment     string		`json:"comment`
-	Likes       uint      `json:"likes"`
+	Comment     string    `json:"comment"`
+	Likes       int       `json:"likes"`
+	AccountId   uint      `json:"account_id" gorm:"not null"`
 	CreatedAt   time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt   time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
