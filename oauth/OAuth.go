@@ -2,6 +2,7 @@ package oauth
 
 import (
 	"context"
+	"os"
 	// "log"
 	// "time"
 
@@ -20,9 +21,9 @@ func AccessToken() (*oauth2.Token, error) {
 
 	ctx := context.Background()
 	config := &clientcredentials.Config{
-		ClientID:     "2ed6dfbde6e5476e886f4d4b328cba91",
-		ClientSecret: "4b62455115c447caa0b7e8ddc3c7b42c",
-		TokenURL:     "https://accounts.spotify.com/api/token",
+		ClientID:     os.Getenv("CLIENT_ID"),
+		ClientSecret: os.Getenv("CLIENT_SECRET"),
+		TokenURL:     os.Getenv("TokenURL"),
 		Scopes:       []string{"playlist-read-private", "playlist-read-collaborative", "streaming"},
 	}
 	token, err := config.Token(ctx)
