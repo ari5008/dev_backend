@@ -34,8 +34,9 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	e.POST("/login", uc.Login)
 	e.POST("/logout", uc.Logout)
 	e.GET("/csrf", uc.CsrfToken)
-	
-	
+
+	e.GET("searchApi", controller.GetSearchResults)
+
 	a := e.Group("/account")
 	a.Use(echojwt.WithConfig(echojwt.Config{
 		SigningKey:  []byte(os.Getenv("SECRET")),
