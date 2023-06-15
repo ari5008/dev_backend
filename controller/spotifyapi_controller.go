@@ -5,6 +5,7 @@ import (
 	"backend/utils"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -30,12 +31,42 @@ type search struct {
 }
 
 type AccountTrack struct {
-	ID           string   `json:"id"`
-	Name         string   `json:"name"`
-	External_url string   `json:"external_url"`
-	Artists      []string `json:"artists"`
-	ImageURL     string   `json:"image_url"`
+	ID           string `json:"id"`
+	Name         string `json:"name"`
+	External_url string `json:"external_url"`
+	Artists      string `json:"artists"`
+	ImageURL     string `json:"image_url"`
 }
+
+// func GetToken(c echo.Context) error {
+
+// 	token, err := oauth.AccessToken()
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, err.Error())
+// 	}
+
+// 	jwtToken := jwt.New(jwt.SigningMethodHS256)
+// 	claims := jwtToken.Claims.(jwt.MapClaims)
+// 	claims["sub"] = "access_token"
+// 	claims["exp"] = token.Expiry.Unix()
+// 	claims["access_token"] = token.AccessToken
+// 	claims["token_type"] = token.TokenType
+
+// 	secretKey := []byte(os.Getenv("SECRET2"))
+// 	tokenString, err := jwtToken.SignedString(secretKey)
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, err.Error())
+// 	}
+
+// 	originalToken, err := utils.ValidateToken(tokenString, secretKey)
+// 	if err != nil {
+// 		return c.JSON(http.StatusUnauthorized, err.Error())
+// 	}
+
+// 	accessToken := originalToken.Claims.(jwt.MapClaims)["access_token"].(string)
+// 	return c.JSON(http.StatusOK, accessToken)
+// }
+
 
 func GetSearchResults(c echo.Context) error {
 
@@ -69,17 +100,18 @@ func GetSearchResults(c echo.Context) error {
 
 	accountTracks := []AccountTrack{}
 	for _, t := range s.Tracks.Items {
-		artists := []string{}
-		for _, a := range t.Artists {
-			artists = append(artists, a.Name)
+		artistNames := make([]string, len(t.Artists))
+		for i, a := range t.Artists {
+			artistNames[i] = a.Name
 		}
+		artist := strings.Join(artistNames, ",")
 		track := AccountTrack{
 			ID:           t.ID,
 			Name:         t.Name,
 			External_url: t.External_urls.Spotify,
-			Artists:      artists,
+			Artists:      artist,
 			ImageURL:     "",
-	}
+		}
 		if len(t.Album.Images) > 0 {
 			track.ImageURL = t.Album.Images[1].URL
 		}
