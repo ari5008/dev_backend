@@ -17,6 +17,8 @@ type ITrackRepository interface {
 	IncrementSelectedTrackLikes(track *model.Track, trackId uint) error
 	DecrementSelectedTrackLikes(track *model.Track, trackId uint) error
 	DeleteTrack(accountId uint, trackId uint) error
+	NotSameTitleAndAccountID(track *model.Track) error
+	NotSameTrack(track *model.Track) error
 }
 
 type trackRepository struct {
@@ -109,4 +111,29 @@ func (tr *trackRepository) DeleteTrack(accountId uint, trackId uint) error {
 		return fmt.Errorf("object does not exist")
 	}
 	return nil
+}
+
+func (tr *trackRepository) NotSameTitleAndAccountID(track *model.Track) error {
+	var count int64
+	if err := tr.db.Model(&model.Track{}).Where("title = ? AND artist_name = ? AND account_id=?", track.Title, track.ArtistName, track.AccountId).Count(&count).Error; err != nil {
+		return err
+	}
+	if count > 0 {
+		// 同じ曲があったらエラーを返す
+		return fmt.Errorf("duplicated Title and ArtistName and AccountID")
+	}
+	return nil
+
+}
+func (tr *trackRepository) NotSameTrack(track *model.Track) error {
+	var count int64
+	if err := tr.db.Model(&model.Track{}).Where("title = ? AND artist_name = ? AND genre = ?", track.Title, track.ArtistName, track.Genre).Count(&count).Error; err != nil {
+		return err
+	}
+	if count > 0 {
+		// 同じ曲があったらエラーを返す
+		return fmt.Errorf("duplicated track")
+	}
+	return nil
+
 }
