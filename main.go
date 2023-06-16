@@ -36,10 +36,11 @@ func main() {
 
 	userValidator := validator.NewUserValidator()
 	accountValidator := validator.NewAccountValidator()
+	trackValidator := validator.NewTrackValidator(trackRepository)
 
 	userUsecase := usecase.NewUserUsecase(useRepository, userValidator)
 	accountUsecase := usecase.NewAccountUsecase(accountRepository, accountValidator)
-	trackUsecase := usecase.NewTrackUsecase(trackRepository)
+	trackUsecase := usecase.NewTrackUsecase(trackRepository, trackValidator)
 	likeFlagUsecase := usecase.NewLikeFlagUsecase(likeFlagRepository)
 
 	userController := controller.NewUserController(userUsecase, accountUsecase)
