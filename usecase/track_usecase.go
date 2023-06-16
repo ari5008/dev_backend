@@ -3,6 +3,7 @@ package usecase
 import (
 	"backend/model"
 	"backend/repository"
+	"backend/validator"
 )
 
 type ITrackUsecase interface {
@@ -18,13 +19,17 @@ type ITrackUsecase interface {
 
 type trackUsecase struct {
 	tr repository.ITrackRepository
+	tv validator.ITrackValidator
 }
 
-func NewTrackUsecase(tr repository.ITrackRepository) ITrackUsecase {
-	return &trackUsecase{tr}
+func NewTrackUsecase(tr repository.ITrackRepository, tv validator.ITrackValidator) ITrackUsecase {
+	return &trackUsecase{tr, tv}
 }
 
 func (tu *trackUsecase) CreateTrack(track model.Track) (model.TrackResponse, error) {
+	if err := tu.tv.TrackValidate(track); err != nil {
+		return model.TrackResponse{}, err
+	}
 	if err := tu.tr.CreateTrack(&track); err != nil {
 		return model.TrackResponse{}, err
 	}
@@ -100,6 +105,9 @@ func (tu *trackUsecase) GetTrackByAccountId(accountId uint) (model.TrackResponse
 }
 
 func (tu *trackUsecase) UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error) {
+	if err := tu.tv.TrackValidate(track); err != nil {
+		return model.TrackResponse{}, err
+	}
 	if err := tu.tr.UpdateTrack(&track, trackId); err != nil {
 		return model.TrackResponse{}, err
 	}
