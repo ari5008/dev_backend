@@ -38,6 +38,7 @@ func (uc *userController) Signup(c echo.Context) error {
 	}
 
 	account := model.Account{
+		UserName: "名無し",
 		UserId: userResponse.ID,
 	}
 	err = uc.au.CreateAccount(account)
