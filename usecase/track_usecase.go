@@ -10,7 +10,7 @@ type ITrackUsecase interface {
 	CreateTrack(track model.Track) (model.TrackResponse, error)
 	GetAllTracks() ([]model.Track, error)
 	GetTrackById(trackId uint) (model.TrackResponse, error)
-	GetTrackByAccountId(accountId uint) (model.TrackResponse, error)
+	GetTrackByAccountId(accountId uint) ([]model.Track, error)
 	UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error)
 	DeleteTrack(accountId uint, trackId uint) error
 	IncrementSelectedTrackLikes(track model.Track, trackId uint) (model.TrackResponse, error)
@@ -86,22 +86,26 @@ func (tu *trackUsecase) GetTrackById(trackId uint) (model.TrackResponse, error) 
 	return resTrack, nil
 }
 
-func (tu *trackUsecase) GetTrackByAccountId(accountId uint) (model.TrackResponse, error) {
-	track := model.Track{}
-	if err := tu.tr.GetTrackById(&track, accountId); err != nil {
-		return model.TrackResponse{}, err
+func (tu *trackUsecase) GetTrackByAccountId(accountId uint) ([]model.Track, error) {
+	tracks := []model.Track{}
+	if err := tu.tr.GetTrackByAccountId(&tracks, accountId); err != nil {
+		return nil, err
 	}
-	resTrack := model.TrackResponse{
-		ID:          track.ID,
-		Title:       track.Title,
-		ArtistName:  track.ArtistName,
-		JacketImage: track.JacketImage,
-		Genre:       track.Genre,
-		Comment:     track.Comment,
-		Likes:       track.Likes,
-		AccountId:   track.AccountId,
+	resTracks := []model.Track{}
+	for _, v := range tracks {
+		t := model.Track{
+			ID:          v.ID,
+			Title:       v.Title,
+			ArtistName:  v.ArtistName,
+			JacketImage: v.JacketImage,
+			Genre:       v.Genre,
+			Comment:     v.Comment,
+			Likes:       v.Likes,
+			AccountId:   v.AccountId,
+		}
+		resTracks = append(resTracks, t)
 	}
-	return resTrack, nil
+	return resTracks, nil
 }
 
 func (tu *trackUsecase) UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error) {
@@ -122,6 +126,13 @@ func (tu *trackUsecase) UpdateTrack(track model.Track, trackId uint) (model.Trac
 		AccountId:   track.AccountId,
 	}
 	return resTrack, nil
+}
+
+func (tu *trackUsecase) DeleteTrack(accountId uint, trackId uint) error {
+	if err := tu.tr.DeleteTrack(accountId, trackId); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (tu *trackUsecase) IncrementSelectedTrackLikes(track model.Track, trackId uint) (model.TrackResponse, error) {
@@ -156,11 +167,4 @@ func (tu *trackUsecase) DecrementSelectedTrackLikes(track model.Track, trackId u
 		AccountId:   track.AccountId,
 	}
 	return resTrack, nil
-}
-
-func (tu *trackUsecase) DeleteTrack(accountId uint, trackId uint) error {
-	if err := tu.tr.DeleteTrack(accountId, trackId); err != nil {
-		return err
-	}
-	return nil
 }

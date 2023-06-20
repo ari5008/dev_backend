@@ -14,7 +14,9 @@ type ITrackController interface {
 	CreateTrack(c echo.Context) error
 	GetAllTracks(c echo.Context) error
 	GetTrackById(c echo.Context) error
+	GetTrackByAccountId(c echo.Context) error
 	UpdateTrack(c echo.Context) error
+	DeleteTrack(c echo.Context) error
 	IncrementSelectedTrackLikes(c echo.Context) error
 	DecrementSelectedTrackLikes(c echo.Context) error
 }
@@ -62,11 +64,18 @@ func (tc *trackController) GetTrackById(c echo.Context) error {
 	id := c.Param("trackId")
 	trackId, _ := strconv.Atoi(id)
 	
-	// track := model.Track{}
-	// if err := c.Bind(&track); err != nil {
-	// 	return c.JSON(http.StatusBadRequest, err.Error())
-	// }
 	trackRes, err := tc.tu.GetTrackById(uint(trackId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, trackRes)
+}
+
+func (tc *trackController) GetTrackByAccountId(c echo.Context) error {
+	id := c.Param("accountId")
+	accountId, _ := strconv.Atoi(id)
+	
+	trackRes, err := tc.tu.GetTrackByAccountId(uint(accountId))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
@@ -87,6 +96,26 @@ func (tc *trackController) UpdateTrack(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, trackRes)
 }
+
+func (tc *trackController) DeleteTrack(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userId := claims["user_id"]
+	account, err := tc.au.GetAccount(uint(userId.(float64)))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	id := c.Param("trackId")
+	trackId, _ := strconv.Atoi(id)
+	
+	err = tc.tu.DeleteTrack(uint(account.ID), uint(trackId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.NoContent(http.StatusNoContent)
+}
+
+
 
 func (tc *trackController) IncrementSelectedTrackLikes(c echo.Context) error {
 	id := c.Param("trackId")

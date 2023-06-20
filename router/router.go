@@ -36,6 +36,7 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	e.GET("/csrf", uc.CsrfToken)
 
 	e.GET("searchApi", controller.GetSearchResults)
+	e.GET("/tracks", tc.GetAllTracks)
 
 	a := e.Group("/account")
 	a.Use(echojwt.WithConfig(echojwt.Config{
@@ -47,10 +48,11 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	a.PUT("/:accountId", ac.UpdateAccount)
 	a.DELETE("/:accountId", ac.DeleteAccount)
 	
-	a.GET("/tracks", tc.GetAllTracks)
 	a.GET("/track/:trackId", tc.GetTrackById)
+	a.GET("/trackByAccountId/:accountId", tc.GetTrackByAccountId)
 	a.POST("/createTrack", tc.CreateTrack)
 	a.PUT("/updateTrack/:trackId", tc.UpdateTrack)
+	a.DELETE("/deleteTrack/:trackId", tc.DeleteTrack)
 	a.PUT("/incrementTrackLikes/:trackId", tc.IncrementSelectedTrackLikes)
 	a.PUT("/decrementTrackLikes/:trackId", tc.DecrementSelectedTrackLikes)
 
