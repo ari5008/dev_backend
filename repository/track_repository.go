@@ -12,11 +12,11 @@ type ITrackRepository interface {
 	CreateTrack(track *model.Track) error
 	GetAllTracks(tracks *[]model.Track) error
 	GetTrackById(track *model.Track, trackId uint) error
-	GetTrackByAccountId(track *model.Track, accountId uint) error
+	GetTrackByAccountId(tracks *[]model.Track, accountId uint) error
 	UpdateTrack(track *model.Track, trackId uint) error
+	DeleteTrack(accountId uint, trackId uint) error
 	IncrementSelectedTrackLikes(track *model.Track, trackId uint) error
 	DecrementSelectedTrackLikes(track *model.Track, trackId uint) error
-	DeleteTrack(accountId uint, trackId uint) error
 	NotSameTitleAndAccountID(track *model.Track) error
 	NotSameTrack(track *model.Track) error
 }
@@ -50,8 +50,8 @@ func (tr *trackRepository) GetTrackById(track *model.Track, trackId uint) error 
 	return nil
 }
 
-func (tr *trackRepository) GetTrackByAccountId(track *model.Track, accountId uint) error {
-	if err := tr.db.Where("account_id=?", accountId).First(track).Error; err != nil {
+func (tr *trackRepository) GetTrackByAccountId(tracks *[]model.Track, accountId uint) error {
+	if err := tr.db.Order("created_at").Where("account_id=?", accountId).Find(tracks).Error; err != nil {
 		return err
 	}
 	return nil
@@ -69,6 +69,17 @@ func (tr *trackRepository) UpdateTrack(track *model.Track, trackId uint) error {
 			"account_id":   track.AccountId,
 		})
 
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected < 1 {
+		return fmt.Errorf("object does not exist")
+	}
+	return nil
+}
+
+func (tr *trackRepository) DeleteTrack(accountId uint, trackId uint) error {
+	result := tr.db.Where("id=? AND account_id=?", trackId, accountId).Delete(&model.Track{})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -102,16 +113,6 @@ func (tr *trackRepository) DecrementSelectedTrackLikes(track *model.Track, track
 	return nil
 }
 
-func (tr *trackRepository) DeleteTrack(accountId uint, trackId uint) error {
-	result := tr.db.Where("id=? AND account_id", trackId, accountId).Delete(&model.Track{})
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected < 1 {
-		return fmt.Errorf("object does not exist")
-	}
-	return nil
-}
 
 func (tr *trackRepository) NotSameTitleAndAccountID(track *model.Track) error {
 	var count int64
