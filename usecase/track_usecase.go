@@ -8,8 +8,11 @@ import (
 
 type ITrackUsecase interface {
 	CreateTrack(track model.Track) (model.TrackResponse, error)
-	GetAllTracks() ([]model.Track, error)
-	GetTrackById(trackId uint) (model.TrackResponse, error)
+	GetAllTracksByLikes() ([]model.Track, error)
+	GetAllTracksByAsc() ([]model.Track, error)
+	GetAllTracksByDesc() ([]model.Track, error)
+	GetAllTracksByGenre() ([]model.Track, error)
+	// GetTrackById(trackId uint) (model.TrackResponse, error)
 	GetTrackByAccountId(accountId uint) ([]model.Track, error)
 	UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error)
 	DeleteTrack(accountId uint, trackId uint) error
@@ -46,9 +49,51 @@ func (tu *trackUsecase) CreateTrack(track model.Track) (model.TrackResponse, err
 	return resTrack, nil
 }
 
-func (tu *trackUsecase) GetAllTracks() ([]model.Track, error) {
+func (tu *trackUsecase) GetAllTracksByLikes() ([]model.Track, error) {
 	tracks := []model.Track{}
-	if err := tu.tr.GetAllTracks(&tracks); err != nil {
+	if err := tu.tr.GetAllTracksByLikes(&tracks); err != nil {
+		return nil, err
+	}
+	resTracks := []model.Track{}
+	for _, v := range tracks {
+		t := model.Track{
+			ID:          v.ID,
+			Title:       v.Title,
+			ArtistName:  v.ArtistName,
+			JacketImage: v.JacketImage,
+			Genre:       v.Genre,
+			Comment:     v.Comment,
+			Likes:       v.Likes,
+			AccountId:   v.AccountId,
+		}
+		resTracks = append(resTracks, t)
+	}
+	return resTracks, nil
+}
+func (tu *trackUsecase) GetAllTracksByAsc() ([]model.Track, error) {
+	tracks := []model.Track{}
+	if err := tu.tr.GetAllTracksByAsc(&tracks); err != nil {
+		return nil, err
+	}
+	resTracks := []model.Track{}
+	for _, v := range tracks {
+		t := model.Track{
+			ID:          v.ID,
+			Title:       v.Title,
+			ArtistName:  v.ArtistName,
+			JacketImage: v.JacketImage,
+			Genre:       v.Genre,
+			Comment:     v.Comment,
+			Likes:       v.Likes,
+			AccountId:   v.AccountId,
+		}
+		resTracks = append(resTracks, t)
+	}
+	return resTracks, nil
+}
+func (tu *trackUsecase) GetAllTracksByDesc() ([]model.Track, error) {
+	tracks := []model.Track{}
+	if err := tu.tr.GetAllTracksByDesc(&tracks); err != nil {
 		return nil, err
 	}
 	resTracks := []model.Track{}
@@ -68,23 +113,45 @@ func (tu *trackUsecase) GetAllTracks() ([]model.Track, error) {
 	return resTracks, nil
 }
 
-func (tu *trackUsecase) GetTrackById(trackId uint) (model.TrackResponse, error) {
-	track := model.Track{}
-	if err := tu.tr.GetTrackById(&track, trackId); err != nil {
-		return model.TrackResponse{}, err
+func (tu *trackUsecase) GetAllTracksByGenre() ([]model.Track, error) {
+	tracks := []model.Track{}
+	if err := tu.tr.GetAllTracksByGenre(&tracks); err != nil {
+		return nil, err
 	}
-	resTrack := model.TrackResponse{
-		ID:          track.ID,
-		Title:       track.Title,
-		ArtistName:  track.ArtistName,
-		JacketImage: track.JacketImage,
-		Genre:       track.Genre,
-		Comment:     track.Comment,
-		Likes:       track.Likes,
-		AccountId:   track.AccountId,
+	resTracks := []model.Track{}
+	for _, v := range tracks {
+		t := model.Track{
+			ID:          v.ID,
+			Title:       v.Title,
+			ArtistName:  v.ArtistName,
+			JacketImage: v.JacketImage,
+			Genre:       v.Genre,
+			Comment:     v.Comment,
+			Likes:       v.Likes,
+			AccountId:   v.AccountId,
+		}
+		resTracks = append(resTracks, t)
 	}
-	return resTrack, nil
+	return resTracks, nil
 }
+
+// func (tu *trackUsecase) GetTrackById(trackId uint) (model.TrackResponse, error) {
+// 	track := model.Track{}
+// 	if err := tu.tr.GetTrackById(&track, trackId); err != nil {
+// 		return model.TrackResponse{}, err
+// 	}
+// 	resTrack := model.TrackResponse{
+// 		ID:          track.ID,
+// 		Title:       track.Title,
+// 		ArtistName:  track.ArtistName,
+// 		JacketImage: track.JacketImage,
+// 		Genre:       track.Genre,
+// 		Comment:     track.Comment,
+// 		Likes:       track.Likes,
+// 		AccountId:   track.AccountId,
+// 	}
+// 	return resTrack, nil
+// }
 
 func (tu *trackUsecase) GetTrackByAccountId(accountId uint) ([]model.Track, error) {
 	tracks := []model.Track{}
