@@ -35,11 +35,12 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	e.POST("/logout", uc.Logout)
 	e.GET("/csrf", uc.CsrfToken)
 
-	e.GET("searchApi", controller.GetSearchResults)
 	e.GET("/tracksByLikes", tc.GetAllTracksByLikes)
 	e.GET("/tracksByAsc", tc.GetAllTracksByAsc)
 	e.GET("/tracksByDesc", tc.GetAllTracksByDesc)
 	e.GET("/tracksByGenre", tc.GetAllTracksByGenre)
+	e.GET("/getAccount/:trackId", ac.GetAccountByTrackId)
+	e.GET("searchApi", controller.GetSearchResults)
 
 	a := e.Group("/account")
 	a.Use(echojwt.WithConfig(echojwt.Config{
@@ -63,6 +64,7 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	a.PUT("/addLikeFlag", lc.AddLikeFlag)
 	a.PUT("/addUnLikeFlag", lc.AddUnLikeFlag)
 	a.GET("/getLikeFlag/:trackId", lc.GetIsLikedFlag)
+	a.DELETE("/deleteLikeFlag/:trackId", lc.DeleteLikeFlag)
 
 	return e
 }
