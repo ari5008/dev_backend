@@ -50,7 +50,6 @@ func (ar *accountRepository) UpdateAccount(account *model.Account, userId uint, 
 		Updates(map[string]interface{}{
 			"user_name":         account.UserName,
 			"image_url":    account.ImageURL,
-			"introduction": account.Introduction,
 		})
 	if result.Error != nil {
 		return result.Error
