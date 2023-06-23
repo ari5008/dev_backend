@@ -44,7 +44,7 @@ func main() {
 	likeFlagUsecase := usecase.NewLikeFlagUsecase(likeFlagRepository)
 
 	userController := controller.NewUserController(userUsecase, accountUsecase)
-	accountController := controller.NewAccountController(accountUsecase)
+	accountController := controller.NewAccountController(accountUsecase, trackUsecase)
 	trackController := controller.NewTrackController(trackUsecase, accountUsecase)
 	likeFlagController := controller.NewLikeFlagController(likeFlagUsecase, accountUsecase)
 
