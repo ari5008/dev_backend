@@ -12,7 +12,7 @@ type ITrackUsecase interface {
 	GetAllTracksByAsc() ([]model.Track, error)
 	GetAllTracksByDesc() ([]model.Track, error)
 	GetAllTracksByGenre() ([]model.Track, error)
-	// GetTrackById(trackId uint) (model.TrackResponse, error)
+	GetTrackById(trackId uint) (model.TrackResponse, error)
 	GetTrackByAccountId(accountId uint) ([]model.Track, error)
 	UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error)
 	DeleteTrack(accountId uint, trackId uint) error
@@ -37,14 +37,15 @@ func (tu *trackUsecase) CreateTrack(track model.Track) (model.TrackResponse, err
 		return model.TrackResponse{}, err
 	}
 	resTrack := model.TrackResponse{
-		ID:          track.ID,
-		Title:       track.Title,
-		ArtistName:  track.ArtistName,
-		JacketImage: track.JacketImage,
-		Genre:       track.Genre,
-		Comment:     track.Comment,
-		Likes:       track.Likes,
-		AccountId:   track.AccountId,
+		ID:           track.ID,
+		Title:        track.Title,
+		ArtistName:   track.ArtistName,
+		JacketImage:  track.JacketImage,
+		Genre:        track.Genre,
+		Comment:      track.Comment,
+		Likes:        track.Likes,
+		External_url: track.External_url,
+		AccountId:    track.AccountId,
 	}
 	return resTrack, nil
 }
@@ -57,14 +58,15 @@ func (tu *trackUsecase) GetAllTracksByLikes() ([]model.Track, error) {
 	resTracks := []model.Track{}
 	for _, v := range tracks {
 		t := model.Track{
-			ID:          v.ID,
-			Title:       v.Title,
-			ArtistName:  v.ArtistName,
-			JacketImage: v.JacketImage,
-			Genre:       v.Genre,
-			Comment:     v.Comment,
-			Likes:       v.Likes,
-			AccountId:   v.AccountId,
+			ID:           v.ID,
+			Title:        v.Title,
+			ArtistName:   v.ArtistName,
+			JacketImage:  v.JacketImage,
+			Genre:        v.Genre,
+			Comment:      v.Comment,
+			Likes:        v.Likes,
+			External_url: v.External_url,
+			AccountId:    v.AccountId,
 		}
 		resTracks = append(resTracks, t)
 	}
@@ -78,14 +80,15 @@ func (tu *trackUsecase) GetAllTracksByAsc() ([]model.Track, error) {
 	resTracks := []model.Track{}
 	for _, v := range tracks {
 		t := model.Track{
-			ID:          v.ID,
-			Title:       v.Title,
-			ArtistName:  v.ArtistName,
-			JacketImage: v.JacketImage,
-			Genre:       v.Genre,
-			Comment:     v.Comment,
-			Likes:       v.Likes,
-			AccountId:   v.AccountId,
+			ID:           v.ID,
+			Title:        v.Title,
+			ArtistName:   v.ArtistName,
+			JacketImage:  v.JacketImage,
+			Genre:        v.Genre,
+			Comment:      v.Comment,
+			Likes:        v.Likes,
+			External_url: v.External_url,
+			AccountId:    v.AccountId,
 		}
 		resTracks = append(resTracks, t)
 	}
@@ -99,14 +102,15 @@ func (tu *trackUsecase) GetAllTracksByDesc() ([]model.Track, error) {
 	resTracks := []model.Track{}
 	for _, v := range tracks {
 		t := model.Track{
-			ID:          v.ID,
-			Title:       v.Title,
-			ArtistName:  v.ArtistName,
-			JacketImage: v.JacketImage,
-			Genre:       v.Genre,
-			Comment:     v.Comment,
-			Likes:       v.Likes,
-			AccountId:   v.AccountId,
+			ID:           v.ID,
+			Title:        v.Title,
+			ArtistName:   v.ArtistName,
+			JacketImage:  v.JacketImage,
+			Genre:        v.Genre,
+			Comment:      v.Comment,
+			Likes:        v.Likes,
+			External_url: v.External_url,
+			AccountId:    v.AccountId,
 		}
 		resTracks = append(resTracks, t)
 	}
@@ -121,37 +125,39 @@ func (tu *trackUsecase) GetAllTracksByGenre() ([]model.Track, error) {
 	resTracks := []model.Track{}
 	for _, v := range tracks {
 		t := model.Track{
-			ID:          v.ID,
-			Title:       v.Title,
-			ArtistName:  v.ArtistName,
-			JacketImage: v.JacketImage,
-			Genre:       v.Genre,
-			Comment:     v.Comment,
-			Likes:       v.Likes,
-			AccountId:   v.AccountId,
+			ID:           v.ID,
+			Title:        v.Title,
+			ArtistName:   v.ArtistName,
+			JacketImage:  v.JacketImage,
+			Genre:        v.Genre,
+			Comment:      v.Comment,
+			Likes:        v.Likes,
+			External_url: v.External_url,
+			AccountId:    v.AccountId,
 		}
 		resTracks = append(resTracks, t)
 	}
 	return resTracks, nil
 }
 
-// func (tu *trackUsecase) GetTrackById(trackId uint) (model.TrackResponse, error) {
-// 	track := model.Track{}
-// 	if err := tu.tr.GetTrackById(&track, trackId); err != nil {
-// 		return model.TrackResponse{}, err
-// 	}
-// 	resTrack := model.TrackResponse{
-// 		ID:          track.ID,
-// 		Title:       track.Title,
-// 		ArtistName:  track.ArtistName,
-// 		JacketImage: track.JacketImage,
-// 		Genre:       track.Genre,
-// 		Comment:     track.Comment,
-// 		Likes:       track.Likes,
-// 		AccountId:   track.AccountId,
-// 	}
-// 	return resTrack, nil
-// }
+func (tu *trackUsecase) GetTrackById(trackId uint) (model.TrackResponse, error) {
+	track := model.Track{}
+	if err := tu.tr.GetTrackById(&track, trackId); err != nil {
+		return model.TrackResponse{}, err
+	}
+	resTrack := model.TrackResponse{
+		ID:           track.ID,
+		Title:        track.Title,
+		ArtistName:   track.ArtistName,
+		JacketImage:  track.JacketImage,
+		Genre:        track.Genre,
+		Comment:      track.Comment,
+		Likes:        track.Likes,
+		External_url: track.External_url,
+		AccountId:    track.AccountId,
+	}
+	return resTrack, nil
+}
 
 func (tu *trackUsecase) GetTrackByAccountId(accountId uint) ([]model.Track, error) {
 	tracks := []model.Track{}
@@ -161,14 +167,15 @@ func (tu *trackUsecase) GetTrackByAccountId(accountId uint) ([]model.Track, erro
 	resTracks := []model.Track{}
 	for _, v := range tracks {
 		t := model.Track{
-			ID:          v.ID,
-			Title:       v.Title,
-			ArtistName:  v.ArtistName,
-			JacketImage: v.JacketImage,
-			Genre:       v.Genre,
-			Comment:     v.Comment,
-			Likes:       v.Likes,
-			AccountId:   v.AccountId,
+			ID:           v.ID,
+			Title:        v.Title,
+			ArtistName:   v.ArtistName,
+			JacketImage:  v.JacketImage,
+			Genre:        v.Genre,
+			Comment:      v.Comment,
+			Likes:        v.Likes,
+			External_url: v.External_url,
+			AccountId:    v.AccountId,
 		}
 		resTracks = append(resTracks, t)
 	}
@@ -183,14 +190,15 @@ func (tu *trackUsecase) UpdateTrack(track model.Track, trackId uint) (model.Trac
 		return model.TrackResponse{}, err
 	}
 	resTrack := model.TrackResponse{
-		ID:          track.ID,
-		Title:       track.Title,
-		ArtistName:  track.ArtistName,
-		JacketImage: track.JacketImage,
-		Genre:       track.Genre,
-		Comment:     track.Comment,
-		Likes:       track.Likes,
-		AccountId:   track.AccountId,
+		ID:           track.ID,
+		Title:        track.Title,
+		ArtistName:   track.ArtistName,
+		JacketImage:  track.JacketImage,
+		Genre:        track.Genre,
+		Comment:      track.Comment,
+		Likes:        track.Likes,
+		External_url: track.External_url,
+		AccountId:    track.AccountId,
 	}
 	return resTrack, nil
 }
@@ -207,14 +215,15 @@ func (tu *trackUsecase) IncrementSelectedTrackLikes(track model.Track, trackId u
 		return model.TrackResponse{}, err
 	}
 	resTrack := model.TrackResponse{
-		ID:          track.ID,
-		Title:       track.Title,
-		ArtistName:  track.ArtistName,
-		JacketImage: track.JacketImage,
-		Genre:       track.Genre,
-		Comment:     track.Comment,
-		Likes:       track.Likes,
-		AccountId:   track.AccountId,
+		ID:           track.ID,
+		Title:        track.Title,
+		ArtistName:   track.ArtistName,
+		JacketImage:  track.JacketImage,
+		Genre:        track.Genre,
+		Comment:      track.Comment,
+		Likes:        track.Likes,
+		External_url: track.External_url,
+		AccountId:    track.AccountId,
 	}
 	return resTrack, nil
 }
@@ -224,14 +233,15 @@ func (tu *trackUsecase) DecrementSelectedTrackLikes(track model.Track, trackId u
 		return model.TrackResponse{}, err
 	}
 	resTrack := model.TrackResponse{
-		ID:          track.ID,
-		Title:       track.Title,
-		ArtistName:  track.ArtistName,
-		JacketImage: track.JacketImage,
-		Genre:       track.Genre,
-		Comment:     track.Comment,
-		Likes:       track.Likes,
-		AccountId:   track.AccountId,
+		ID:           track.ID,
+		Title:        track.Title,
+		ArtistName:   track.ArtistName,
+		JacketImage:  track.JacketImage,
+		Genre:        track.Genre,
+		Comment:      track.Comment,
+		Likes:        track.Likes,
+		External_url: track.External_url,
+		AccountId:    track.AccountId,
 	}
 	return resTrack, nil
 }
