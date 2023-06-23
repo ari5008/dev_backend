@@ -16,7 +16,6 @@ type ITrackController interface {
 	GetAllTracksByAsc(c echo.Context) error
 	GetAllTracksByDesc(c echo.Context) error
 	GetAllTracksByGenre(c echo.Context) error
-	// GetTrackById(c echo.Context) error
 	GetTrackByAccountId(c echo.Context) error
 	UpdateTrack(c echo.Context) error
 	DeleteTrack(c echo.Context) error
@@ -86,17 +85,6 @@ func (tc *trackController) GetAllTracksByGenre(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, resTracks)
 }
-
-// func (tc *trackController) GetTrackById(c echo.Context) error {
-// 	id := c.Param("trackId")
-// 	trackId, _ := strconv.Atoi(id)
-	
-// 	trackRes, err := tc.tu.GetTrackById(uint(trackId))
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, err.Error())
-// 	}
-// 	return c.JSON(http.StatusOK, trackRes)
-// }
 
 func (tc *trackController) GetTrackByAccountId(c echo.Context) error {
 	id := c.Param("accountId")
