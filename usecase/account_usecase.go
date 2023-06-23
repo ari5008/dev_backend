@@ -39,9 +39,6 @@ func (au *accountUsecase) GetAccount(userId uint) (model.AccountResponse, error)
 		ID:           account.ID,
 		UserName:     account.UserName,
 		ImageURL:     account.ImageURL,
-		Introduction: account.Introduction,
-		CreatedAt:    account.CreatedAt,
-		UpdatedAt:    account.UpdatedAt,
 	}
 	return resAccount, nil
 }
@@ -55,9 +52,6 @@ func (au *accountUsecase) GetAccountById(accountId uint) (model.AccountResponse,
 		ID:           account.ID,
 		UserName:     account.UserName,
 		ImageURL:     account.ImageURL,
-		Introduction: account.Introduction,
-		CreatedAt:    account.CreatedAt,
-		UpdatedAt:    account.UpdatedAt,
 	}
 	return resAccount, nil
 }
@@ -73,9 +67,6 @@ func (au *accountUsecase) UpdateAccount(account model.Account, userId uint, acco
 		ID:           account.ID,
 		UserName:     account.UserName,
 		ImageURL:     account.ImageURL,
-		Introduction: account.Introduction,
-		CreatedAt:    account.CreatedAt,
-		UpdatedAt:    account.UpdatedAt,
 	}
 	return resAccount, nil
 }
