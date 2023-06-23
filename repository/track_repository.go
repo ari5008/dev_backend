@@ -14,7 +14,7 @@ type ITrackRepository interface {
 	GetAllTracksByAsc(tracks *[]model.Track) error
 	GetAllTracksByDesc(tracks *[]model.Track) error
 	GetAllTracksByGenre(tracks *[]model.Track) error
-	// GetTrackById(track *model.Track, trackId uint) error
+	GetTrackById(track *model.Track, trackId uint) error
 	GetTrackByAccountId(tracks *[]model.Track, accountId uint) error
 	UpdateTrack(track *model.Track, trackId uint) error
 	DeleteTrack(accountId uint, trackId uint) error
@@ -62,17 +62,17 @@ func (tr *trackRepository) GetAllTracksByDesc(tracks *[]model.Track) error {
 
 func (tr *trackRepository) GetAllTracksByGenre(tracks *[]model.Track) error {
 	if err := tr.db.Order("CASE WHEN genre = 'ポップ' THEN 1 WHEN genre = '可愛い' THEN 2 WHEN genre = 'ロック' THEN 3 WHEN genre = 'ヒップホップ' THEN 4 WHEN genre = 'レトロ' THEN 5 WHEN genre = 'アンニュイ' THEN 6 WHEN genre = '癒されたい' THEN 7 WHEN genre = 'テンションが上がる' THEN 8 WHEN genre = '無心で聞きたい' THEN 9 WHEN genre = 'ドライブで聞きたい' THEN 10 WHEN genre = '最近のおすすめ' THEN 11 END").Find(tracks).Error; err != nil {
-			return err
+		return err
 	}
 	return nil
 }
 
-// func (tr *trackRepository) GetTrackById(track *model.Track, trackId uint) error {
-// 	if err := tr.db.Where("id=?", trackId).First(track).Error; err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+func (tr *trackRepository) GetTrackById(track *model.Track, trackId uint) error {
+	if err := tr.db.Where("id=?", trackId).First(track).Error; err != nil {
+		return err
+	}
+	return nil
+}
 
 func (tr *trackRepository) GetTrackByAccountId(tracks *[]model.Track, accountId uint) error {
 	if err := tr.db.Order("created_at").Where("account_id=?", accountId).Find(tracks).Error; err != nil {
@@ -90,6 +90,7 @@ func (tr *trackRepository) UpdateTrack(track *model.Track, trackId uint) error {
 			"genre":        track.Genre,
 			"comment":      track.Comment,
 			"likes":        track.Likes,
+			"external_url": track.External_url,
 			"account_id":   track.AccountId,
 		})
 
@@ -136,7 +137,6 @@ func (tr *trackRepository) DecrementSelectedTrackLikes(track *model.Track, track
 	}
 	return nil
 }
-
 
 func (tr *trackRepository) NotSameTitleAndAccountID(track *model.Track) error {
 	var count int64
