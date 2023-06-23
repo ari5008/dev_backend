@@ -15,6 +15,7 @@ type ILikeFlagController interface {
 	AddLikeFlag(c echo.Context) error
 	AddUnLikeFlag(c echo.Context) error
 	GetIsLikedFlag(c echo.Context) error
+	DeleteLikeFlag(c echo.Context) error
 }
 
 type likeFlagController struct {
@@ -88,4 +89,16 @@ func (lc likeFlagController) GetIsLikedFlag(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusCreated, resLikeFlag)
+}
+
+func (lc likeFlagController) DeleteLikeFlag(c echo.Context) error {
+
+	id := c.Param("trackId")
+	trackId, _ := strconv.Atoi(id)
+
+	err := lc.lu.DeleteLikeFlag(uint(trackId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.NoContent(http.StatusNoContent)
 }

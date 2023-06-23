@@ -10,14 +10,15 @@ type ILikeFlagUsecase interface {
 	AddLikeFlag(likeFlag model.Likeflag) (model.LikeflagResponse, error)
 	AddUnlikeFlag(likeFlag model.Likeflag) (model.LikeflagResponse, error)
 	GetIsLikedFlag(likeFlag model.Likeflag, account_id uint, track_id uint) (model.LikeflagResponse, error)
+	DeleteLikeFlag(track_id uint) error
 }
 
 type likeFlagUsecase struct {
 	lr repository.ILikeFlagRepository
 }
 
-func NewLikeFlagUsecase(atr repository.ILikeFlagRepository) ILikeFlagUsecase {
-	return &likeFlagUsecase{atr}
+func NewLikeFlagUsecase(lr repository.ILikeFlagRepository) ILikeFlagUsecase {
+	return &likeFlagUsecase{lr}
 }
 
 func (lu likeFlagUsecase) CreateLikeFlag(likeFlag model.Likeflag) (model.LikeflagResponse, error) {
@@ -72,3 +73,12 @@ func (lu likeFlagUsecase) GetIsLikedFlag(likeFlag model.Likeflag, account_id uin
 	}
 	return resAccountTrack, nil
 }
+
+func (lu likeFlagUsecase) DeleteLikeFlag(track_id uint) error {
+	if err := lu.lr.DeleteLikeFlag(track_id); err != nil {
+		return err
+	}
+	
+	return nil
+}
+
