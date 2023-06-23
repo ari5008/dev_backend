@@ -12,16 +12,18 @@ import (
 
 type IAccountController interface {
 	GetAccount(c echo.Context) error
+	GetAccountByTrackId(c echo.Context) error
 	UpdateAccount(c echo.Context) error
 	DeleteAccount(c echo.Context) error
 }
 
 type accountController struct {
 	au usecase.IAccountUsecase
+	tu usecase.ITrackUsecase
 }
 
-func NewAccountController(au usecase.IAccountUsecase) IAccountController {
-	return &accountController{au}
+func NewAccountController(au usecase.IAccountUsecase, tu usecase.ITrackUsecase) IAccountController {
+	return &accountController{au, tu}
 }
 
 func (ac *accountController) GetAccount(c echo.Context) error {
@@ -29,6 +31,20 @@ func (ac *accountController) GetAccount(c echo.Context) error {
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["user_id"]
 	resAccount, err := ac.au.GetAccount(uint(userId.(float64)))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, resAccount)
+}
+
+func (ac *accountController) GetAccountByTrackId(c echo.Context) error {
+	id := c.Param("trackId")
+	trackId, _ := strconv.Atoi(id)
+	resTrack, err := ac.tu.GetTrackById(uint(trackId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	resAccount, err := ac.au.GetAccountById(uint(resTrack.AccountId))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
