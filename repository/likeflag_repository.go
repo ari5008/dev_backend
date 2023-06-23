@@ -11,6 +11,7 @@ type ILikeFlagRepository interface {
 	AddLikeFlag(likeFlag *model.Likeflag) error
 	AddUnlikeFlag(likeFlag *model.Likeflag) error
 	GetIsLikedFlag(likeFlag *model.Likeflag, account_id uint, track_id uint) error
+	DeleteLikeFlag(track_id uint) error
 }
 
 type likeFlagRepository struct {
@@ -59,6 +60,13 @@ func (lr *likeFlagRepository) AddUnlikeFlag(likeFlag *model.Likeflag) error {
 
 func (lr *likeFlagRepository) GetIsLikedFlag(likeFlag *model.Likeflag, account_id uint, track_id uint) error {
 	if err := lr.db.Where("account_id = ? AND track_id = ?", account_id, track_id).First(likeFlag).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (lr *likeFlagRepository) DeleteLikeFlag(track_id uint) error {
+	if err := lr.db.Where("track_id = ?", track_id).Delete(&model.Likeflag{}).Error; err != nil {
 		return err
 	}
 	return nil
