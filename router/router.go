@@ -13,7 +13,7 @@ import (
 func NewRouter(uc controller.IUserController, ac controller.IAccountController, tc controller.ITrackController, lc controller.ILikeFlagController) *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000",
+		AllowOrigins: []string{"http://localhost:3000", "https://dev-frontend-gamma.vercel.app",
 			os.Getenv("Front_URL")},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept,
 			echo.HeaderAccessControlAllowHeaders, echo.HeaderXCSRFToken, "Authorization"},
