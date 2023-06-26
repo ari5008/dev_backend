@@ -60,7 +60,7 @@ func (uc *userController) Login(c echo.Context) error {
 	cookie := new(http.Cookie)
 	cookie.Name = "token"
 	cookie.Value = tokenString
-	cookie.Expires = time.Now().Add(60 * time.Minute)
+	cookie.Expires = time.Now().Add(12 * time.Hour)
 	cookie.Path = "/"
 	cookie.Domain = os.Getenv("API_DOMAIN")
 	cookie.Secure = true
