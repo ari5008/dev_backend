@@ -45,5 +45,9 @@ func (tv *trackValidator) TrackValidate(track model.Track) error {
 			&track.Genre,
 			validation.Required.Error("require genre"),
 		),
+		validation.Field(
+			&track.Comment,
+			validation.RuneLength(0, 100).Error("limit comment"),
+		),
 	)
 }
