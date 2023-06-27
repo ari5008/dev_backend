@@ -13,7 +13,7 @@ import (
 func NewRouter(uc controller.IUserController, ac controller.IAccountController, tc controller.ITrackController, lc controller.ILikeFlagController) *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000", "https://dev-frontend-gamma.vercel.app",
+		AllowOrigins: []string{"http://localhost:3000",
 			os.Getenv("Front_URL")},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept,
 			echo.HeaderAccessControlAllowHeaders, echo.HeaderXCSRFToken, "Authorization"},
@@ -25,9 +25,9 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 		CookiePath:     "/",
 		CookieDomain:   os.Getenv("API_DOMAIN"),
 		CookieHTTPOnly: true,
-		// CookieSameSite: http.SameSiteNoneMode,
-		CookieSameSite: http.SameSiteDefaultMode,
-		// CookieMaxAge: 60,
+		CookieSameSite: http.SameSiteNoneMode,
+		// CookieSameSite: http.SameSiteDefaultMode,
+		CookieMaxAge: 300,
 	}))
 
 	e.POST("/signup", uc.Signup)
@@ -52,7 +52,6 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	a.PUT("/:accountId", ac.UpdateAccount)
 	a.DELETE("/:accountId", ac.DeleteAccount)
 	
-	// a.GET("/track/:trackId", tc.GetTrackById)
 	a.GET("/trackByAccountId/:accountId", tc.GetTrackByAccountId)
 	a.POST("/createTrack", tc.CreateTrack)
 	a.PUT("/updateTrack/:trackId", tc.UpdateTrack)
