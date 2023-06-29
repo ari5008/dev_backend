@@ -20,11 +20,12 @@
 <br>
 
 # ツール・ライブラリ
-<img src="https://img.shields.io/badge/Javascript-276DC3.svg?logo=javascript&style=flat" > <img src="https://img.shields.io/badge/-React-555.svg?logo=react&style=flat">
-<img src="https://img.shields.io/badge/-chakra-09D3AC.svg?logo=chakraui&style=flat"> 
-<img src="https://img.shields.io/badge/-reactquery-8CA1AF.svg?logo=reactquery&style=flat">
-<img src="https://img.shields.io/badge/-reactrouter-white.svg?logo=reactrouter&style=flat">
-<img src="https://img.shields.io/badge/-fontawesome-F06A6A.svg?logo=fontawesome&style=flat">
+<img src="https://img.shields.io/badge/go-gray.svg?logo=go&style=flat" > <img src="https://img.shields.io/badge/-echo-22ADF6.svg?logo=echo&style=flat">
+<img src="https://img.shields.io/badge/-postgresql-F7901E.svg?logo=postgresql&style=flat"> 
+<img src="https://img.shields.io/badge/-gorm-00E9A3.svg?logo=gorm&style=flat"> 
+<img src="https://img.shields.io/badge/-postman-8CA1AF.svg?logo=postman&style=flat">
+
+spotifyAPiを使用して、曲一覧を取得
 
 <br>
 
