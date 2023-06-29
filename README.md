@@ -1,50 +1,49 @@
-# Name）
- ~ 曲選曲 ~
- 
-曲を選択し、閲覧できる掲示板
- 
-# DEMO
- 
-いろんな曲を知るきっかけになる。日々の生活に癒しを求めている人におすすめ
- 
-# Features
- 
-Login機能、アカウント編集機能、曲の並び替え、いいね機能など
- 
-# Requirement
- 
-"曲選曲"を動かすのに必要なライブラリ(backend)
+#  - 曲選曲 - :musical_note:
 
-	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
-	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/joho/godotenv v1.5.1
-	github.com/labstack/echo-jwt/v4 v4.1.0
-	github.com/labstack/echo/v4 v4.10.2
-	golang.org/x/crypto v0.8.0
-	golang.org/x/oauth2 v0.8.0
-	gorm.io/driver/postgres v1.5.0
-	gorm.io/gorm v1.25.0
-	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgx/v5 v5.3.0 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/labstack/gommon v0.4.0 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.18 // indirect
-	github.com/stretchr/testify v1.8.2 // indirect
-	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
-	golang.org/x/time v0.3.0 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+ 曲の投稿サイトのバックエンドです。<br >
+ 自分の好きな曲を投稿したり、他の人の曲一覧を見ることができます。 
+ <br>
+ <br>
  
-# Author
- 
-* ari5008
+**Home画面**
+ <br>
+ <img width="800" alt="ホーム画像" src="https://github.com/ari5008/dev_frontend/assets/127650560/c2097c42-0030-41b6-8d4c-d2b672d1e128"> 
+ <br>
+ **閲覧画面**
+ <br>
+ <img width="400" alt="検索画面" src="https://github.com/ari5008/dev_frontend/assets/127650560/a8c48fed-cc41-4d1b-ba26-1c1c821b0493">
+ <br>
+ **検索画面**
+ <br>
+ <img width="400" alt="検索画面" src="https://github.com/ari5008/dev_frontend/assets/127650560/698f25aa-b84c-4fc7-8eaa-8118554b6c28">
+
+<br>
+
+# ツール・ライブラリ
+<img src="https://img.shields.io/badge/Javascript-276DC3.svg?logo=javascript&style=flat" > <img src="https://img.shields.io/badge/-React-555.svg?logo=react&style=flat">
+<img src="https://img.shields.io/badge/-chakra-09D3AC.svg?logo=chakraui&style=flat"> 
+<img src="https://img.shields.io/badge/-reactquery-8CA1AF.svg?logo=reactquery&style=flat">
+<img src="https://img.shields.io/badge/-reactrouter-white.svg?logo=reactrouter&style=flat">
+<img src="https://img.shields.io/badge/-fontawesome-F06A6A.svg?logo=fontawesome&style=flat">
+
+<br>
+
+# URL
+https://dev-frontend-five.vercel.app/ <br />
+
+<br>
+
+
+# 機能一覧
+  - アカウント登録、ログイン機能
+  - ユーザー名、ユーザーのアバター変更機能
+  - 曲選択機能
+    - 曲を検索し、投稿できる機能
+    - 曲にコメント、ジャンルを載せて投稿できる機能
+    - 曲を削除できる機能
+  - 曲閲覧機能
+    - いいね機能、ユーザーの詳細機能
+    - いいね順、ジャンル順など曲の並び替えができる機能
+
+
+              
