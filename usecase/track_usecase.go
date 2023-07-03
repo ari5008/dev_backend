@@ -8,10 +8,7 @@ import (
 
 type ITrackUsecase interface {
 	CreateTrack(track model.Track) (model.TrackResponse, error)
-	GetAllTracksByLikes() ([]model.Track, error)
-	GetAllTracksByAsc() ([]model.Track, error)
-	GetAllTracksByDesc() ([]model.Track, error)
-	GetAllTracksByGenre() ([]model.Track, error)
+	GetAllTracks() ([]model.Track, error)
 	GetTrackById(trackId uint) (model.TrackResponse, error)
 	GetTrackByAccountId(accountId uint) ([]model.Track, error)
 	UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error)
@@ -50,9 +47,9 @@ func (tu *trackUsecase) CreateTrack(track model.Track) (model.TrackResponse, err
 	return resTrack, nil
 }
 
-func (tu *trackUsecase) GetAllTracksByLikes() ([]model.Track, error) {
+func (tu *trackUsecase) GetAllTracks() ([]model.Track, error) {
 	tracks := []model.Track{}
-	if err := tu.tr.GetAllTracksByLikes(&tracks); err != nil {
+	if err := tu.tr.GetAllTracks(&tracks); err != nil {
 		return nil, err
 	}
 	resTracks := []model.Track{}
@@ -67,73 +64,7 @@ func (tu *trackUsecase) GetAllTracksByLikes() ([]model.Track, error) {
 			Likes:        v.Likes,
 			External_url: v.External_url,
 			AccountId:    v.AccountId,
-		}
-		resTracks = append(resTracks, t)
-	}
-	return resTracks, nil
-}
-func (tu *trackUsecase) GetAllTracksByAsc() ([]model.Track, error) {
-	tracks := []model.Track{}
-	if err := tu.tr.GetAllTracksByAsc(&tracks); err != nil {
-		return nil, err
-	}
-	resTracks := []model.Track{}
-	for _, v := range tracks {
-		t := model.Track{
-			ID:           v.ID,
-			Title:        v.Title,
-			ArtistName:   v.ArtistName,
-			JacketImage:  v.JacketImage,
-			Genre:        v.Genre,
-			Comment:      v.Comment,
-			Likes:        v.Likes,
-			External_url: v.External_url,
-			AccountId:    v.AccountId,
-		}
-		resTracks = append(resTracks, t)
-	}
-	return resTracks, nil
-}
-func (tu *trackUsecase) GetAllTracksByDesc() ([]model.Track, error) {
-	tracks := []model.Track{}
-	if err := tu.tr.GetAllTracksByDesc(&tracks); err != nil {
-		return nil, err
-	}
-	resTracks := []model.Track{}
-	for _, v := range tracks {
-		t := model.Track{
-			ID:           v.ID,
-			Title:        v.Title,
-			ArtistName:   v.ArtistName,
-			JacketImage:  v.JacketImage,
-			Genre:        v.Genre,
-			Comment:      v.Comment,
-			Likes:        v.Likes,
-			External_url: v.External_url,
-			AccountId:    v.AccountId,
-		}
-		resTracks = append(resTracks, t)
-	}
-	return resTracks, nil
-}
-
-func (tu *trackUsecase) GetAllTracksByGenre() ([]model.Track, error) {
-	tracks := []model.Track{}
-	if err := tu.tr.GetAllTracksByGenre(&tracks); err != nil {
-		return nil, err
-	}
-	resTracks := []model.Track{}
-	for _, v := range tracks {
-		t := model.Track{
-			ID:           v.ID,
-			Title:        v.Title,
-			ArtistName:   v.ArtistName,
-			JacketImage:  v.JacketImage,
-			Genre:        v.Genre,
-			Comment:      v.Comment,
-			Likes:        v.Likes,
-			External_url: v.External_url,
-			AccountId:    v.AccountId,
+			CreatedAt:    v.CreatedAt,
 		}
 		resTracks = append(resTracks, t)
 	}

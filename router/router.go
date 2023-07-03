@@ -35,10 +35,7 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	e.POST("/logout", uc.Logout)
 	e.GET("/csrf", uc.CsrfToken)
 
-	e.GET("/tracksByLikes", tc.GetAllTracksByLikes)
-	e.GET("/tracksByAsc", tc.GetAllTracksByAsc)
-	e.GET("/tracksByDesc", tc.GetAllTracksByDesc)
-	e.GET("/tracksByGenre", tc.GetAllTracksByGenre)
+	e.GET("/tracks", tc.GetAllTracks)
 	e.GET("/getAccount/:trackId", ac.GetAccountByTrackId)
 	e.GET("searchApi", controller.GetSearchResults)
 
