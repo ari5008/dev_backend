@@ -12,10 +12,7 @@ import (
 
 type ITrackController interface {
 	CreateTrack(c echo.Context) error
-	GetAllTracksByLikes(c echo.Context) error
-	GetAllTracksByAsc(c echo.Context) error
-	GetAllTracksByDesc(c echo.Context) error
-	GetAllTracksByGenre(c echo.Context) error
+	GetAllTracks(c echo.Context) error
 	GetTrackByAccountId(c echo.Context) error
 	UpdateTrack(c echo.Context) error
 	DeleteTrack(c echo.Context) error
@@ -54,32 +51,8 @@ func (tc *trackController) CreateTrack(c echo.Context) error {
 	return c.JSON(http.StatusCreated, resTrack)
 }
 
-func (tc *trackController) GetAllTracksByLikes(c echo.Context) error {
-	resTracks, err := tc.tu.GetAllTracksByLikes()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
-	}
-	return c.JSON(http.StatusOK, resTracks)
-}
-
-func (tc *trackController) GetAllTracksByAsc(c echo.Context) error {
-	resTracks, err := tc.tu.GetAllTracksByAsc()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
-	}
-	return c.JSON(http.StatusOK, resTracks)
-}
-
-func (tc *trackController) GetAllTracksByDesc(c echo.Context) error {
-	resTracks, err := tc.tu.GetAllTracksByDesc()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
-	}
-	return c.JSON(http.StatusOK, resTracks)
-}
-
-func (tc *trackController) GetAllTracksByGenre(c echo.Context) error {
-	resTracks, err := tc.tu.GetAllTracksByGenre()
+func (tc *trackController) GetAllTracks(c echo.Context) error {
+	resTracks, err := tc.tu.GetAllTracks()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
