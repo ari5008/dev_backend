@@ -10,10 +10,7 @@ import (
 
 type ITrackRepository interface {
 	CreateTrack(track *model.Track) error
-	GetAllTracksByLikes(tracks *[]model.Track) error
-	GetAllTracksByAsc(tracks *[]model.Track) error
-	GetAllTracksByDesc(tracks *[]model.Track) error
-	GetAllTracksByGenre(tracks *[]model.Track) error
+	GetAllTracks(tracks *[]model.Track) error
 	GetTrackById(track *model.Track, trackId uint) error
 	GetTrackByAccountId(tracks *[]model.Track, accountId uint) error
 	UpdateTrack(track *model.Track, trackId uint) error
@@ -39,29 +36,8 @@ func (tr *trackRepository) CreateTrack(track *model.Track) error {
 	return nil
 }
 
-func (tr *trackRepository) GetAllTracksByLikes(tracks *[]model.Track) error {
-	if err := tr.db.Order("likes DESC").Find(tracks).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func (tr *trackRepository) GetAllTracksByAsc(tracks *[]model.Track) error {
-	if err := tr.db.Order("created_at ASC").Find(tracks).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func (tr *trackRepository) GetAllTracksByDesc(tracks *[]model.Track) error {
-	if err := tr.db.Order("created_at DESC").Find(tracks).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func (tr *trackRepository) GetAllTracksByGenre(tracks *[]model.Track) error {
-	if err := tr.db.Order("CASE WHEN genre = 'ポップ' THEN 1 WHEN genre = '可愛い' THEN 2 WHEN genre = 'ロック' THEN 3 WHEN genre = 'ヒップホップ' THEN 4 WHEN genre = 'レトロ' THEN 5 WHEN genre = 'アンニュイ' THEN 6 WHEN genre = '癒されたい' THEN 7 WHEN genre = 'テンションが上がる' THEN 8 WHEN genre = '無心で聞きたい' THEN 9 WHEN genre = 'ドライブで聞きたい' THEN 10 WHEN genre = '最近のおすすめ' THEN 11 END").Find(tracks).Error; err != nil {
+func (tr *trackRepository) GetAllTracks(tracks *[]model.Track) error {
+	if err := tr.db.Order("created_at").Find(tracks).Error; err != nil {
 		return err
 	}
 	return nil
