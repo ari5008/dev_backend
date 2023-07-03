@@ -26,4 +26,5 @@ type TrackResponse struct {
 	Likes        int       `json:"likes"`
 	External_url string    `json:"external_url"`
 	AccountId    uint      `json:"account_id" gorm:"not null"`
+	CreatedAt    time.Time `json:"created_at" gorm:"autoCreateTime"`
 }
