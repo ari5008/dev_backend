@@ -40,7 +40,6 @@ func (tu *trackUsecase) CreateTrack(track model.Track) (model.TrackResponse, err
 		Genre:        track.Genre,
 		Comment:      track.Comment,
 		Likes:        track.Likes,
-		External_url: track.External_url,
 		AccountId:    track.AccountId,
 		CreatedAt:    track.CreatedAt,
 	}
@@ -62,7 +61,6 @@ func (tu *trackUsecase) GetAllTracks() ([]model.Track, error) {
 			Genre:        v.Genre,
 			Comment:      v.Comment,
 			Likes:        v.Likes,
-			External_url: v.External_url,
 			AccountId:    v.AccountId,
 			CreatedAt:    v.CreatedAt,
 		}
@@ -84,7 +82,6 @@ func (tu *trackUsecase) GetTrackById(trackId uint) (model.TrackResponse, error) 
 		Genre:        track.Genre,
 		Comment:      track.Comment,
 		Likes:        track.Likes,
-		External_url: track.External_url,
 		AccountId:    track.AccountId,
 		CreatedAt:    track.CreatedAt,
 	}
@@ -106,7 +103,6 @@ func (tu *trackUsecase) GetTrackByAccountId(accountId uint) ([]model.Track, erro
 			Genre:        v.Genre,
 			Comment:      v.Comment,
 			Likes:        v.Likes,
-			External_url: v.External_url,
 			AccountId:    v.AccountId,
 			CreatedAt:    v.CreatedAt,
 		}
@@ -134,7 +130,6 @@ func (tu *trackUsecase) IncrementSelectedTrackLikes(track model.Track, trackId u
 		Genre:        track.Genre,
 		Comment:      track.Comment,
 		Likes:        track.Likes,
-		External_url: track.External_url,
 		AccountId:    track.AccountId,
 		CreatedAt:    track.CreatedAt,
 	}
@@ -153,7 +148,6 @@ func (tu *trackUsecase) DecrementSelectedTrackLikes(track model.Track, trackId u
 		Genre:        track.Genre,
 		Comment:      track.Comment,
 		Likes:        track.Likes,
-		External_url: track.External_url,
 		AccountId:    track.AccountId,
 		CreatedAt:    track.CreatedAt,
 	}
