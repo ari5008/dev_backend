@@ -51,7 +51,6 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 	
 	a.GET("/trackByAccountId/:accountId", tc.GetTrackByAccountId)
 	a.POST("/createTrack", tc.CreateTrack)
-	a.PUT("/updateTrack/:trackId", tc.UpdateTrack)
 	a.DELETE("/deleteTrack/:trackId", tc.DeleteTrack)
 	a.PUT("/incrementTrackLikes/:trackId", tc.IncrementSelectedTrackLikes)
 	a.PUT("/decrementTrackLikes/:trackId", tc.DecrementSelectedTrackLikes)

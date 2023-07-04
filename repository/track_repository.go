@@ -13,7 +13,6 @@ type ITrackRepository interface {
 	GetAllTracks(tracks *[]model.Track) error
 	GetTrackById(track *model.Track, trackId uint) error
 	GetTrackByAccountId(tracks *[]model.Track, accountId uint) error
-	UpdateTrack(track *model.Track, trackId uint) error
 	DeleteTrack(accountId uint, trackId uint) error
 	IncrementSelectedTrackLikes(track *model.Track, trackId uint) error
 	DecrementSelectedTrackLikes(track *model.Track, trackId uint) error
@@ -57,27 +56,6 @@ func (tr *trackRepository) GetTrackByAccountId(tracks *[]model.Track, accountId 
 	return nil
 }
 
-func (tr *trackRepository) UpdateTrack(track *model.Track, trackId uint) error {
-	result := tr.db.Model(track).Clauses(clause.Returning{}).Where("id=?", trackId).
-		Updates(map[string]interface{}{
-			"title":        track.Title,
-			"artist_name":  track.ArtistName,
-			"jacket_image": track.JacketImage,
-			"genre":        track.Genre,
-			"comment":      track.Comment,
-			"likes":        track.Likes,
-			"external_url": track.External_url,
-			"account_id":   track.AccountId,
-		})
-
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected < 1 {
-		return fmt.Errorf("object does not exist")
-	}
-	return nil
-}
 
 func (tr *trackRepository) DeleteTrack(accountId uint, trackId uint) error {
 	result := tr.db.Where("id=? AND account_id=?", trackId, accountId).Delete(&model.Track{})

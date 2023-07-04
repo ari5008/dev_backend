@@ -11,7 +11,6 @@ type ITrackUsecase interface {
 	GetAllTracks() ([]model.Track, error)
 	GetTrackById(trackId uint) (model.TrackResponse, error)
 	GetTrackByAccountId(accountId uint) ([]model.Track, error)
-	UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error)
 	DeleteTrack(accountId uint, trackId uint) error
 	IncrementSelectedTrackLikes(track model.Track, trackId uint) (model.TrackResponse, error)
 	DecrementSelectedTrackLikes(track model.Track, trackId uint) (model.TrackResponse, error)
@@ -43,6 +42,7 @@ func (tu *trackUsecase) CreateTrack(track model.Track) (model.TrackResponse, err
 		Likes:        track.Likes,
 		External_url: track.External_url,
 		AccountId:    track.AccountId,
+		CreatedAt:    track.CreatedAt,
 	}
 	return resTrack, nil
 }
@@ -86,6 +86,7 @@ func (tu *trackUsecase) GetTrackById(trackId uint) (model.TrackResponse, error) 
 		Likes:        track.Likes,
 		External_url: track.External_url,
 		AccountId:    track.AccountId,
+		CreatedAt:    track.CreatedAt,
 	}
 	return resTrack, nil
 }
@@ -107,31 +108,11 @@ func (tu *trackUsecase) GetTrackByAccountId(accountId uint) ([]model.Track, erro
 			Likes:        v.Likes,
 			External_url: v.External_url,
 			AccountId:    v.AccountId,
+			CreatedAt:    v.CreatedAt,
 		}
 		resTracks = append(resTracks, t)
 	}
 	return resTracks, nil
-}
-
-func (tu *trackUsecase) UpdateTrack(track model.Track, trackId uint) (model.TrackResponse, error) {
-	if err := tu.tv.TrackValidate(track); err != nil {
-		return model.TrackResponse{}, err
-	}
-	if err := tu.tr.UpdateTrack(&track, trackId); err != nil {
-		return model.TrackResponse{}, err
-	}
-	resTrack := model.TrackResponse{
-		ID:           track.ID,
-		Title:        track.Title,
-		ArtistName:   track.ArtistName,
-		JacketImage:  track.JacketImage,
-		Genre:        track.Genre,
-		Comment:      track.Comment,
-		Likes:        track.Likes,
-		External_url: track.External_url,
-		AccountId:    track.AccountId,
-	}
-	return resTrack, nil
 }
 
 func (tu *trackUsecase) DeleteTrack(accountId uint, trackId uint) error {
@@ -155,6 +136,7 @@ func (tu *trackUsecase) IncrementSelectedTrackLikes(track model.Track, trackId u
 		Likes:        track.Likes,
 		External_url: track.External_url,
 		AccountId:    track.AccountId,
+		CreatedAt:    track.CreatedAt,
 	}
 	return resTrack, nil
 }
@@ -173,6 +155,7 @@ func (tu *trackUsecase) DecrementSelectedTrackLikes(track model.Track, trackId u
 		Likes:        track.Likes,
 		External_url: track.External_url,
 		AccountId:    track.AccountId,
+		CreatedAt:    track.CreatedAt,
 	}
 	return resTrack, nil
 }
