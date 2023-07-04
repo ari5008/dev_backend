@@ -15,9 +15,6 @@ type search struct {
 		Items []struct {
 			ID            string `json:"id"`
 			Name          string `json:"name"`
-			External_urls struct {
-				Spotify string `json:"spotify"`
-			} `json:"external_urls"`
 			Artists []struct {
 				Name string `json:"name"`
 			} `json:"artists"`
@@ -33,7 +30,6 @@ type search struct {
 type AccountTrack struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
-	External_url string `json:"external_url"`
 	Artists      string `json:"artists"`
 	ImageURL     string `json:"image_url"`
 }
@@ -78,7 +74,6 @@ func GetSearchResults(c echo.Context) error {
 		track := AccountTrack{
 			ID:           t.ID,
 			Name:         t.Name,
-			External_url: t.External_urls.Spotify,
 			Artists:      artist,
 			ImageURL:     "",
 		}
