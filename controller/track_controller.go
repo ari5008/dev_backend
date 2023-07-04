@@ -14,7 +14,6 @@ type ITrackController interface {
 	CreateTrack(c echo.Context) error
 	GetAllTracks(c echo.Context) error
 	GetTrackByAccountId(c echo.Context) error
-	UpdateTrack(c echo.Context) error
 	DeleteTrack(c echo.Context) error
 	IncrementSelectedTrackLikes(c echo.Context) error
 	DecrementSelectedTrackLikes(c echo.Context) error
@@ -64,21 +63,6 @@ func (tc *trackController) GetTrackByAccountId(c echo.Context) error {
 	accountId, _ := strconv.Atoi(id)
 	
 	trackRes, err := tc.tu.GetTrackByAccountId(uint(accountId))
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
-	}
-	return c.JSON(http.StatusOK, trackRes)
-}
-
-func (tc *trackController) UpdateTrack(c echo.Context) error {
-	id := c.Param("trackId")
-	trackId, _ := strconv.Atoi(id)
-	
-	track := model.Track{}
-	if err := c.Bind(&track); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
-	}
-	trackRes, err := tc.tu.UpdateTrack(track, uint(trackId))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
