@@ -10,7 +10,6 @@ type Track struct {
 	Genre        string    `json:"genre"`
 	Comment      string    `json:"comment"`
 	Likes        int       `json:"likes"`
-	External_url string    `json:"external_url"`
 	AccountId    uint      `json:"account_id" gorm:"not null"`
 	CreatedAt    time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt    time.Time `json:"updated_at" gorm:"autoUpdateTime"`
@@ -24,7 +23,6 @@ type TrackResponse struct {
 	Genre        string    `json:"genre"`
 	Comment      string    `json:"comment"`
 	Likes        int       `json:"likes"`
-	External_url string    `json:"external_url"`
 	AccountId    uint      `json:"account_id" gorm:"not null"`
 	CreatedAt    time.Time `json:"created_at" gorm:"autoCreateTime"`
 }
