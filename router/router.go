@@ -2,6 +2,7 @@ package router
 
 import (
 	"backend/controller"
+	"backend/utils"
 	"net/http"
 	"os"
 
@@ -20,15 +21,24 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 		AllowMethods:     []string{"GET", "PUT", "POST", "DELETE"},
 		AllowCredentials: true,
 	}))
-	e.Use(middleware.CSRFWithConfig(middleware.
-		CSRFConfig{
-		CookiePath:     "/",
-		CookieDomain:   os.Getenv("API_DOMAIN"),
-		CookieHTTPOnly: true,
-		CookieSameSite: http.SameSiteNoneMode,
-		// CookieSameSite: http.SameSiteDefaultMode,
-		CookieMaxAge: 300,
-	}))
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			userAgent := c.Request().Header.Get("User-Agent")
+			isMobile := utils.IsMobileDevice(userAgent)
+			if isMobile {
+				return next(c)
+			} else {
+				return middleware.CSRFWithConfig(middleware.CSRFConfig{
+					CookiePath:     "/",
+					CookieDomain:   os.Getenv("API_DOMAIN"),
+					CookieHTTPOnly: true,
+					CookieSameSite: http.SameSiteNoneMode,
+					// CookieSameSite: http.SameSiteDefaultMode,
+					CookieMaxAge: 300,
+				})(next)(c)
+			}
+		}
+	})
 
 	e.POST("/signup", uc.Signup)
 	e.POST("/login", uc.Login)
@@ -44,11 +54,11 @@ func NewRouter(uc controller.IUserController, ac controller.IAccountController, 
 		SigningKey:  []byte(os.Getenv("SECRET")),
 		TokenLookup: "cookie:token",
 	}))
-	
-	a.GET("", ac.GetAccount)	
+
+	a.GET("", ac.GetAccount)
 	a.PUT("/:accountId", ac.UpdateAccount)
 	a.DELETE("/:accountId", ac.DeleteAccount)
-	
+
 	a.GET("/trackByAccountId/:accountId", tc.GetTrackByAccountId)
 	a.POST("/createTrack", tc.CreateTrack)
 	a.DELETE("/deleteTrack/:trackId", tc.DeleteTrack)
